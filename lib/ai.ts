@@ -83,7 +83,7 @@ function keywordFallback(query: string): NormalizedQuery {
   // First word of remainder is likely the model (e.g. "F150", "Camry", "Civic")
   const modelMatch = remainder.match(/^([\w-]+)/);
   const model = modelMatch ? modelMatch[1] : null;
-  const part = model ? remainder.replace(modelMatch[1], '').trim() : remainder;
+  const part = model ? remainder.replace(model, '').trim() : remainder;
 
   return {
     year,
