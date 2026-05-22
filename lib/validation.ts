@@ -1,4 +1,5 @@
-const SAFE_QUERY_RE = /^[\w\s\-.,'"()]+$/;
+// \p{L} matches any Unicode letter (covers ã, é, ç, ü, etc.)
+const SAFE_QUERY_RE = /^[\p{L}\p{N}\s\-.,'"()]+$/u;
 const MIN_LEN = 3;
 const MAX_LEN = 200;
 const CURRENT_YEAR = new Date().getFullYear();

@@ -28,6 +28,27 @@ async function safeFetch<T>(url: string): Promise<T> {
 
 const normalize = (s: string) => s.toLowerCase().replace(/[-\s]/g, '');
 
+// Known Brazilian model → make mappings for when AI fails to identify the brand
+const MODEL_TO_MAKE: Record<string, string> = {
+  onix: 'Chevrolet', tracker: 'Chevrolet', spin: 'Chevrolet', montana: 'Chevrolet',
+  s10: 'Chevrolet', cruze: 'Chevrolet', equinox: 'Chevrolet', trailblazer: 'Chevrolet',
+  hb20: 'Hyundai', creta: 'Hyundai', tucson: 'Hyundai', ix35: 'Hyundai',
+  gol: 'Volkswagen', polo: 'Volkswagen', virtus: 'Volkswagen', tcross: 'Volkswagen',
+  saveiro: 'Volkswagen', voyage: 'Volkswagen', tiguan: 'Volkswagen', amarok: 'Volkswagen',
+  argo: 'Fiat', uno: 'Fiat', mobi: 'Fiat', cronos: 'Fiat', toro: 'Fiat',
+  strada: 'Fiat', pulse: 'Fiat', ducato: 'Fiat', doblo: 'Fiat', bravo: 'Fiat',
+  sandero: 'Renault', kwid: 'Renault', duster: 'Renault', logan: 'Renault',
+  captur: 'Renault', oroch: 'Renault', kardian: 'Renault',
+  compass: 'Jeep', renegade: 'Jeep', commander: 'Jeep',
+  hr: 'Honda', hrv: 'Honda', civic: 'Honda', fit: 'Honda', wrv: 'Honda', city: 'Honda',
+  corolla: 'Toyota', hilux: 'Toyota', yaris: 'Toyota', sw4: 'Toyota', rav4: 'Toyota',
+  kicks: 'Nissan', frontier: 'Nissan', versa: 'Nissan', march: 'Nissan',
+};
+
+function makeFromModel(model: string): string | null {
+  return MODEL_TO_MAKE[normalize(model)] ?? null;
+}
+
 async function getBrands(): Promise<FipeBrand[]> {
   const key = 'fipe:brands';
   const cached = cache.get<FipeBrand[]>(key);
@@ -47,9 +68,19 @@ export async function searchByMakeModel(
     const brands = await getBrands();
 
     const normMake = normalize(make);
-    const brand =
+    let brand =
       brands.find((b) => normalize(b.nome) === normMake) ??
       brands.find((b) => normalize(b.nome).includes(normMake) || normMake.includes(normalize(b.nome)));
+
+    // When AI couldn't identify the make (e.g. query is "onix suspensão"), try
+    // resolving it from the model name using the known Brazilian model→make map.
+    if (!brand && model) {
+      const inferredMake = makeFromModel(model);
+      if (inferredMake) {
+        const normInferred = normalize(inferredMake);
+        brand = brands.find((b) => normalize(b.nome) === normInferred);
+      }
+    }
 
     if (!brand) return [];
 

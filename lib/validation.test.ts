@@ -45,6 +45,16 @@ describe('sanitizeQuery', () => {
   it('accepts hyphens, commas, apostrophes', () => {
     expect(sanitizeQuery("O'Reilly brake pad, 2020")).toBe("O'Reilly brake pad, 2020");
   });
+
+  it('accepts Portuguese queries with accented characters', () => {
+    expect(sanitizeQuery('2022 onix suspensão')).toBe('2022 onix suspensão');
+  });
+
+  it('accepts common pt-BR part terms: amortecedor, vela, pastilha', () => {
+    expect(sanitizeQuery('pastilha de freio Gol 2020')).toBe('pastilha de freio Gol 2020');
+    expect(sanitizeQuery('amortecedor traseiro HB20')).toBe('amortecedor traseiro HB20');
+    expect(sanitizeQuery('vela de ignição Onix')).toBe('vela de ignição Onix');
+  });
 });
 
 describe('sanitizeYear', () => {

@@ -22,9 +22,12 @@ export async function runSearch(query: string): Promise<SearchResponse> {
 
   const normalized = await normalizeQuery(query);
 
+  // Use normalized make when available; fall back to raw query only for NHTSA/CarQuery
+  // (FIPE handles make=null via model→make lookup table)
   const make = normalized.make ?? query;
+  const fipeMake = normalized.make ?? normalized.model ?? query;
   const [fipeResults, nhtsaResults, carqueryResults] = await Promise.allSettled([
-    fipe.searchByMakeModel(make, normalized.model, normalized.year, normalized.part),
+    fipe.searchByMakeModel(fipeMake, normalized.model, normalized.year, normalized.part),
     nhtsa.searchByMakeModel(make, normalized.model, normalized.year, normalized.part),
     carquery.searchByMakeModel(make, normalized.model, normalized.year, normalized.part),
   ]);

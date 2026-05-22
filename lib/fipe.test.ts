@@ -101,6 +101,15 @@ describe('fipe.searchByMakeModel', () => {
     expect(results).toEqual([]);
   });
 
+  it('resolves make from model name when make is not a known brand (e.g. "onix" → Chevrolet)', async () => {
+    // Simulates keywordFallback passing make="onix" (the model itself) because it
+    // couldn't identify the brand — FIPE should still find results via MODEL_TO_MAKE
+    mockFIPESequence(BRANDS, CHEVROLET_MODELS);
+    const results = await searchByMakeModel('onix', 'onix', 2022, 'suspensão');
+    expect(results.length).toBeGreaterThan(0);
+    expect(results[0].vehicle.make).toBe('Chevrolet');
+  });
+
   it('returns empty array on network error', async () => {
     vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('timeout')));
     const results = await searchByMakeModel('Chevrolet', 'Onix', null, 'part');
