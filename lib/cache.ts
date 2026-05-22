@@ -3,7 +3,7 @@ interface CacheEntry<T> {
   expiresAt: number;
 }
 
-class InMemoryCache {
+export class InMemoryCache {
   private store = new Map<string, CacheEntry<unknown>>();
 
   get<T>(key: string): T | null {
