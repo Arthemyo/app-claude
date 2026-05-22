@@ -52,9 +52,10 @@ AI:
 - OpenRouter
 - Gemini
 
-External APIs:
-- NHTSA Vehicle API
-- CarQuery API
+External APIs (priority order):
+1. FIPE — `parallelum.com.br/fipe/api/v1/carros` — Brazilian market vehicles (Onix, HB20, Gol, Argo, etc.). Primary source for national models.
+2. NHTSA Vehicle API — US/international models fallback
+3. CarQuery API — secondary fallback
 
 Caching:
 - in-memory initially

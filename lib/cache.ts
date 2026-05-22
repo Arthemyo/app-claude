@@ -23,6 +23,10 @@ export class InMemoryCache {
   has(key: string): boolean {
     return this.get(key) !== null;
   }
+
+  clear(): void {
+    this.store.clear();
+  }
 }
 
 export const cache = new InMemoryCache();
@@ -30,4 +34,5 @@ export const cache = new InMemoryCache();
 export const TTL = {
   SEARCH: 60_000,
   VEHICLES: 5 * 60_000,
+  BRANDS: 24 * 60 * 60_000,
 } as const;

@@ -18,7 +18,7 @@ export interface PartResult {
   id: string;
   name: string;
   oem?: string;
-  source: 'nhtsa' | 'carquery';
+  source: 'fipe' | 'nhtsa' | 'carquery';
   vehicle: Vehicle;
   confidence: 'high' | 'medium' | 'low';
 }

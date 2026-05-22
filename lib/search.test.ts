@@ -27,6 +27,10 @@ vi.mock('./carquery', () => ({
   searchByMakeModel: vi.fn().mockResolvedValue([]),
 }));
 
+vi.mock('./fipe', () => ({
+  searchByMakeModel: vi.fn().mockResolvedValue([]),
+}));
+
 vi.mock('./cache', async (importOriginal) => {
   const actual = await importOriginal<typeof import('./cache')>();
   return {

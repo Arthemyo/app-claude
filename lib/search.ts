@@ -1,5 +1,6 @@
 import { normalizeQuery } from '@/lib/ai';
 import { cache, TTL } from '@/lib/cache';
+import * as fipe from '@/lib/fipe';
 import * as nhtsa from '@/lib/nhtsa';
 import * as carquery from '@/lib/carquery';
 import type { SearchResponse, PartResult } from '@/types';
@@ -21,22 +22,16 @@ export async function runSearch(query: string): Promise<SearchResponse> {
 
   const normalized = await normalizeQuery(query);
 
-  const [nhtsaResults, carqueryResults] = await Promise.allSettled([
-    nhtsa.searchByMakeModel(
-      normalized.make ?? query,
-      normalized.model,
-      normalized.year,
-      normalized.part
-    ),
-    carquery.searchByMakeModel(
-      normalized.make ?? query,
-      normalized.model,
-      normalized.year,
-      normalized.part
-    ),
+  const make = normalized.make ?? query;
+  const [fipeResults, nhtsaResults, carqueryResults] = await Promise.allSettled([
+    fipe.searchByMakeModel(make, normalized.model, normalized.year, normalized.part),
+    nhtsa.searchByMakeModel(make, normalized.model, normalized.year, normalized.part),
+    carquery.searchByMakeModel(make, normalized.model, normalized.year, normalized.part),
   ]);
 
+  // FIPE first: covers Brazilian market (Onix, HB20, Gol, etc.) that NHTSA lacks
   const rawResults = [
+    ...(fipeResults.status === 'fulfilled' ? fipeResults.value : []),
     ...(nhtsaResults.status === 'fulfilled' ? nhtsaResults.value : []),
     ...(carqueryResults.status === 'fulfilled' ? carqueryResults.value : []),
   ];
