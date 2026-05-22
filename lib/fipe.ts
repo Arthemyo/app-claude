@@ -78,7 +78,9 @@ export async function searchByMakeModel(
       const inferredMake = makeFromModel(model);
       if (inferredMake) {
         const normInferred = normalize(inferredMake);
-        brand = brands.find((b) => normalize(b.nome) === normInferred);
+        brand =
+          brands.find((b) => normalize(b.nome) === normInferred) ??
+          brands.find((b) => normalize(b.nome).includes(normInferred) || normInferred.includes(normalize(b.nome)));
       }
     }
 
