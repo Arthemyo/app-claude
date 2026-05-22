@@ -162,3 +162,44 @@ Scale later with:
 2. PostgreSQL
 3. Search engine
 4. Supplier integrations
+
+---
+
+# Localization
+
+Target audience: **Brazilian mechanics (pt-BR)**.
+
+## Language
+
+- UI language: Portuguese (Brazil)
+- HTML lang: `pt-BR`
+- All user-facing strings must be in Portuguese
+- AI prompt instructs Gemini to normalize part names to Brazilian Portuguese terminology
+
+## AI — Brazilian context
+
+The AI prompt must:
+- Accept queries in Portuguese and English
+- Normalize part names to pt-BR terms (e.g. "pastilha de freio", "amortecedor", "vela de ignição")
+- Recognize Brazilian slang: "buzina", "retrovisor", "coxim", "bengala" (CV axle), "tensor"
+- Know Brazilian-market models: Onix, HB20, Gol, Uno, Sandero, Kwid, Argo, Mobi, Compass, Tracker, T-Cross, Creta, Pulse, Cronos
+
+## Suppliers
+
+Brazilian suppliers used in the PartCard dropdown (in priority order):
+
+| Supplier | URL pattern |
+|---|---|
+| Mercado Livre | `https://lista.mercadolivre.com.br/{query}` |
+| Amazon Brasil | `https://www.amazon.com.br/s?k={query}` |
+| Shopee | `https://shopee.com.br/search?keyword={query}` |
+| Magazine Luiza | `https://www.magazineluiza.com.br/busca/{query}/` |
+| Americanas | `https://www.americanas.com.br/busca/{query}` |
+
+Do NOT add US-only suppliers (AutoZone, O'Reilly, RockAuto).
+
+## Tutorial links
+
+YouTube and Google searches use Portuguese phrasing:
+- YouTube: `como trocar {peça} {veículo}`
+- Google: `como trocar {peça} {veículo}` on google.com.br

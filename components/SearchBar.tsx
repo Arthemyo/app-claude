@@ -20,7 +20,7 @@ export function SearchBar({ defaultValue = '' }: { defaultValue?: string }) {
         type="search"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        placeholder="e.g. 2019 Ford F150 brake pads"
+        placeholder="ex: 2022 Onix pastilha de freio"
         maxLength={200}
         className="flex-1 rounded-lg border border-border bg-white px-4 py-3 text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
         autoFocus
@@ -30,7 +30,7 @@ export function SearchBar({ defaultValue = '' }: { defaultValue?: string }) {
         disabled={value.trim().length < 3}
         className="rounded-lg bg-primary px-5 py-3 text-sm font-medium text-white hover:bg-primary-hover disabled:opacity-50"
       >
-        Search
+        Buscar
       </button>
     </form>
   );

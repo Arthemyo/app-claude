@@ -3,7 +3,7 @@ import type { NormalizedQuery } from '@/types';
 const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
 const TIMEOUT_MS = 3_000;
 
-const SYSTEM_PROMPT = `You are an automotive parts query parser. Extract structured data from mechanic search queries.
+const SYSTEM_PROMPT = `You are an automotive parts query parser for Brazilian mechanics. Extract structured data from search queries written in Portuguese or English.
 
 Return ONLY valid JSON. Do not explain. Do not add commentary.
 
@@ -19,7 +19,9 @@ Output schema:
 
 Rules:
 - If year is ambiguous, return null
-- Normalize part names to standard English automotive terminology
+- Normalize part names to standard Brazilian Portuguese automotive terminology (e.g. "pastilha de freio", "amortecedor", "alternador", "vela de ignição")
+- Understand Brazilian slang: "buzina" (horn), "retrovisor" (mirror), "coxim" (engine mount), "tensor" (tensioner), "bengala" (CV axle)
+- Recognize Brazilian-market models: Onix, HB20, Gol, Uno, Sandero, Kwid, Argo, Mobi, Compass, Tracker, T-Cross
 - Never invent make/model combinations that do not exist
 - If the query is not automotive-related, return { "error": "non_automotive" }`;
 
@@ -52,12 +54,16 @@ function validateResponse(raw: unknown): NormalizedQuery | null {
 }
 
 const KNOWN_MAKES = [
+  // Global
   'Acura','Alfa Romeo','Audi','BMW','Buick','Cadillac','Chevrolet','Chevy',
   'Chrysler','Dodge','Ferrari','Fiat','Ford','GMC','Genesis','Honda','Hyundai',
   'Infiniti','Jaguar','Jeep','Kia','Lamborghini','Land Rover','Lexus','Lincoln',
   'Maserati','Mazda','Mercedes','Mercedes-Benz','Mini','Mitsubishi','Nissan',
   'Porsche','Ram','Rivian','Rolls-Royce','Subaru','Tesla','Toyota','Volkswagen',
   'VW','Volvo',
+  // Brazilian market
+  'Caoa Chery','Chery','Citroën','Citroen','Effa','GWM','Haval','Peugeot',
+  'Renault','Renegade','Toro','Tracker',
 ];
 
 // Longest-first so "Mercedes-Benz" matches before "Mercedes"

@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm --version)",
+      "Bash(dig api.nhtsa.dot.gov +short)",
+      "Bash(dig www.carqueryapi.com +short)",
+      "Bash(curl -s \"https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMakeYear/make/Ford/modelyear/2019?format=json\")",
+      "Bash(python3 -m json.tool)",
+      "Bash(curl -s \"https://www.carqueryapi.com/api/0.3/?cmd=getModels&make=Ford&year=2019&model=f150\")",
+      "Bash(curl -s \"http://localhost:3000/api/search?q=2019+Ford+F150+brake+pads\")",
+      "Bash(curl -s \"http://localhost:3000/results?q=2019+Ford+F150+brake+pads\")",
+      "Bash(npm run *)"
+    ]
+  }
+}

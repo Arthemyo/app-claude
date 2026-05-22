@@ -11,7 +11,7 @@ async function Results({ query }: { query: string }) {
   if (data.results.length === 0) {
     return (
       <p className="text-center text-muted py-12">
-        No parts found for &ldquo;{query}&rdquo;. Try a more specific search.
+        Nenhuma peça encontrada para &ldquo;{query}&rdquo;. Tente uma busca mais específica.
       </p>
     );
   }
@@ -37,7 +37,7 @@ export default async function ResultsPage({
   if (!query) {
     return (
       <div className="mx-auto max-w-2xl px-4 py-12">
-        <ErrorBanner message="Invalid search query. Please try again." />
+        <ErrorBanner message="Busca inválida. Por favor, tente novamente." />
       </div>
     );
   }
@@ -45,7 +45,7 @@ export default async function ResultsPage({
   return (
     <div className="mx-auto max-w-2xl px-4 py-8">
       <p className="mb-6 text-sm text-muted">
-        Results for <span className="font-medium text-slate-800">&ldquo;{query}&rdquo;</span>
+        Resultados para <span className="font-medium text-slate-800">&ldquo;{query}&rdquo;</span>
       </p>
       <Suspense fallback={<SkeletonLoader count={5} />}>
         <Results query={query} />

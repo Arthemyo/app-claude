@@ -5,9 +5,9 @@ const styles: Record<string, string> = {
 };
 
 const labels: Record<string, string> = {
-  high: 'High match',
-  medium: 'Likely match',
-  low: 'Possible match',
+  high: 'Alta compatibilidade',
+  medium: 'Provável compatibilidade',
+  low: 'Possível compatibilidade',
 };
 
 export function CompatibilityBadge({ confidence }: { confidence: 'high' | 'medium' | 'low' }) {
