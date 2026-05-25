@@ -1,5 +1,6 @@
 import { normalizeQuery } from '@/lib/ai';
 import { cache, TTL } from '@/lib/cache';
+import * as tecdoc from '@/lib/tecdoc';
 import * as fipe from '@/lib/fipe';
 import * as nhtsa from '@/lib/nhtsa';
 import * as carquery from '@/lib/carquery';
@@ -18,12 +19,15 @@ function deduplicateResults(results: PartResult[]): PartResult[] {
 async function fetchSources(normalized: NormalizedQuery): Promise<PartResult[]> {
   const make = normalized.make ?? '';
   const fipeMake = normalized.make ?? normalized.model ?? '';
-  const [fipeResults, nhtsaResults, carqueryResults] = await Promise.allSettled([
+  const [tecdocResults, fipeResults, nhtsaResults, carqueryResults] = await Promise.allSettled([
+    make ? tecdoc.searchByMakeModel(make, normalized.model, normalized.year, normalized.part) : Promise.resolve([]),
     fipeMake ? fipe.searchByMakeModel(fipeMake, normalized.model, normalized.year, normalized.part) : Promise.resolve([]),
     make ? nhtsa.searchByMakeModel(make, normalized.model, normalized.year, normalized.part) : Promise.resolve([]),
     make ? carquery.searchByMakeModel(make, normalized.model, normalized.year, normalized.part) : Promise.resolve([]),
   ]);
+  // TecDoc first: has real OEM codes and supersedes generic results
   return [
+    ...(tecdocResults.status === 'fulfilled' ? tecdocResults.value : []),
     ...(fipeResults.status === 'fulfilled' ? fipeResults.value : []),
     ...(nhtsaResults.status === 'fulfilled' ? nhtsaResults.value : []),
     ...(carqueryResults.status === 'fulfilled' ? carqueryResults.value : []),
