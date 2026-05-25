@@ -28,15 +28,29 @@ function buildLinks(part: PartResult): { suppliers: LinkDef[]; tutorials: LinkDe
     { label: 'Pesquisar no Google', href: `https://www.google.com.br/search?q=${tutorialQuery}` },
   ];
 
-  const info: LinkDef[] = [];
+  const techQuery = encodeURIComponent(`ficha técnica ${name} ${vehicleStr}`.trim());
+  const torqueQuery = encodeURIComponent(`torque especificações ${name} ${vehicleStr}`.trim());
+  const mecanicoQuery = encodeURIComponent(`${name} ${vehicleStr}`.trim());
+
+  const info: LinkDef[] = [
+    {
+      label: 'Ficha técnica',
+      href: `https://www.google.com.br/search?q=${techQuery}`,
+    },
+    {
+      label: 'Torque e medidas',
+      href: `https://www.google.com.br/search?q=${torqueQuery}`,
+    },
+    {
+      label: 'Guia do Mecânico',
+      href: `https://www.guiadomecanico.com.br/?s=${mecanicoQuery}`,
+    },
+  ];
+
   if (vehicle.make && vehicle.model && vehicle.year) {
     info.push({
       label: 'Recalls NHTSA',
       href: `https://www.nhtsa.gov/recalls?nhtsaId=&make=${encodeURIComponent(vehicle.make)}&model=${encodeURIComponent(vehicle.model)}&year=${vehicle.year}`,
-    });
-    info.push({
-      label: 'Reclamações NHTSA',
-      href: `https://www.nhtsa.gov/vehicle/${encodeURIComponent(vehicle.make)}/${encodeURIComponent(vehicle.model)}/${vehicle.year}/complaints`,
     });
   }
 
