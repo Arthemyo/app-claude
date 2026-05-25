@@ -28,11 +28,16 @@ function buildLinks(part: PartResult): { suppliers: LinkDef[]; tutorials: LinkDe
     { label: 'Pesquisar no Google', href: `https://www.google.com.br/search?q=${tutorialQuery}` },
   ];
 
+  const oemQuery = encodeURIComponent(`código OEM número peça ${name} ${vehicleStr}`.trim());
   const techQuery = encodeURIComponent(`ficha técnica ${name} ${vehicleStr}`.trim());
   const torqueQuery = encodeURIComponent(`torque especificações ${name} ${vehicleStr}`.trim());
   const mecanicoQuery = encodeURIComponent(`${name} ${vehicleStr}`.trim());
 
   const info: LinkDef[] = [
+    {
+      label: 'Buscar código OEM',
+      href: `https://www.google.com.br/search?q=${oemQuery}`,
+    },
     {
       label: 'Ficha técnica',
       href: `https://www.google.com.br/search?q=${techQuery}`,
@@ -102,7 +107,11 @@ export function PartCard({ part }: { part: PartResult }) {
           <div>
             <p className="font-medium text-slate-900">{part.name}</p>
             {vehicleLabel && <p className="mt-0.5 text-sm text-muted">{vehicleLabel}</p>}
-            {part.oem && <p className="mt-0.5 text-xs text-muted">OEM: {part.oem}</p>}
+            {part.oem && (
+              <span className="mt-1.5 inline-flex items-center gap-1 rounded border border-amber-200 bg-amber-50 px-2 py-0.5 font-mono text-xs font-medium text-amber-800">
+                OEM {part.oem}
+              </span>
+            )}
           </div>
           <div className="flex flex-shrink-0 flex-col items-end gap-1">
             <CompatibilityBadge confidence={part.confidence} />
